@@ -1,0 +1,102 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content_checkout %}
+<style>
+    /* Định dạng chung */
+    .checkout-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .order-success-message {
+        background-color: #28a745;
+        color: #fff;
+        font-size: 18px;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .order-summary {
+        width: 700px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .cart-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .cart-item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .cart-item-info {
+        flex: 2;
+    }
+
+    .price {
+        color: #333;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .order-total p {
+        font-size: 16px;
+        margin: 5px 0;
+    }
+
+    .btn-back {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="checkout-container">
+    <!-- Thông báo đặt hàng thành công -->
+    <div class="order-success-message">
+        Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.
+    </div>
+
+    <!-- Chi tiết đơn hàng -->
+    <div class="order-summary">
+        <h3>Chi tiết đơn hàng</h3>
+        <hr>
+        {% for item in items %}
+        <div class="cart-row">
+            <img class="cart-item-img" src="{{item.product.ImageURL}}" alt="Sản phẩm">
+            <div class="cart-item-info">
+                <p>{{item.product.name}}</p>
+                <p>Số lượng: {{item.quantity}}</p>
+            </div>
+            <div class="price">{{item.product.price}} đ</div>
+        </div>
+        {% endfor %}
+        <hr>
+        <div class="order-total">
+            <p>Tổng sản phẩm: {{order.get_cart_items}}</p>
+            <p class="price">Tổng tiền: {{order.get_cart_total}} đ</p>
+        </div>
+        <a href="/" class="btn-back">&#x2190; Quay lại trang chủ</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,167 @@
+{%extends 'app/base.html'%} 
+{%load static%} 
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh mục</title>
+    <style>
+      /* CSS for product card */
+.product-container {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.product-box {
+    width: 260px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.discount-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff4d4f;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    margin: 15px 0;
+}
+
+.product-box h6 {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-box .price {
+    font-size: 18px;
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-box .btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.btn-group .btn {
+    flex: 1;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-group .btn:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.product-rating {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #f5a623;
+}
+
+.product-rating .star {
+    margin-right: 2px;
+}
+
+.favorite-btn {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.favorite-btn:hover {
+    background-color: #ff7875;
+}
+
+    </style>
+    
+</head>
+<body>
+  {% load static %}
+  
+    {% block register %}
+    <div class="product-container">
+      <div class="row" style="width: 100%; margin-left: auto; margin-right: auto;">
+        {% for product in products %}
+        <div class="col-lg-3">
+          <div class="product-box" style="border: 2px solid #ccc; border-radius: 15px; position: relative;">
+            
+            <!-- Nhãn giảm giá ở góc trên bên trái -->
+            <div class="discount-label">
+              Giảm {{ product.discount_percentage }}%
+            </div>
+            
+            <!-- Tách phần ảnh thành khối riêng -->
+            <div class="product-image">
+              <img class="thumbnail" src="{{product.ImageURL}}" alt="{{ product.name }}">
+            </div>
+      
+            <div class="box-element product">
+              <h6><strong>{{product.name}}</strong></h6>
+              <h5 class="price" style="color:red; display: inline-block; float:right;"><strong>{{ product.price }}</strong></h5>
+              <hr>
+              <div class="btn-group" style="width: 100%;">
+                <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn1 update-cart">Thêm vào giỏ</button>
+                <a class="btn btn-outline-success" href="{% url 'detail' %}?id={{product.id}}">Chi tiết</a> 
+              </div>
+              
+              <!-- Biểu tượng 5 sao và nút yêu thích trên cùng một dòng -->
+              <div class="product-footer">
+                <!-- Biểu tượng 5 sao -->
+                <div class="product-rating">
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                </div>
+                
+                <!-- Nút yêu thích -->
+                <button class="favorite-btn" onclick="addToFavorites({{product.id}})">Yêu thích</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endblock register %}
+
+</body>
+</html>

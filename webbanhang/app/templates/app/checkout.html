@@ -1,0 +1,243 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content_checkout %}
+<style>
+        /* CSS for product card */
+    .product-container {
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+    }
+
+    .product-box {
+        width: 260px;
+        border: 2px solid #ccc;
+        border-radius: 15px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .discount-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #ff4d4f;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        margin: 15px 0;
+    }
+
+    .product-box h6 {
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .product-box .price {
+        font-size: 18px;
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .product-box .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+    }
+
+    .btn-group .btn {
+        flex: 1;
+        margin: 0 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-group .btn:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .product-rating {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #f5a623;
+    }
+
+    .product-rating .star {
+        margin-right: 2px;
+    }
+
+    .favorite-btn {
+        background-color: #ff4d4f;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .favorite-btn:hover {
+        background-color: #ff7875;
+    }
+
+    /* Checkout container styles */
+    .checkout-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .checkout-left {
+        flex: 1;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        margin-right: 10px;
+    }
+
+    .checkout-right {
+        flex: 1;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        max-width: 50%;
+    }
+
+    .form-wrapper h3, .form-wrapper h4 {
+        width: 500px;
+        margin-bottom: 20px;
+    }
+
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+    .cart-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .cart-item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .cart-item-info {
+        flex: 2;
+    }
+
+    .cart-item-name {
+        font-weight: bold;
+    }
+
+    .cart-item-price {
+        flex: 1;
+        text-align: right;
+        color: #333;
+    }
+
+    .order-total p {
+        font-size: 16px;
+        margin: 5px 0;
+    }
+
+    .price {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+</style>
+<div class="checkout-container">
+    <div class="checkout-section">
+        <div class="form-wrapper" style=" width: 600px;margin-left:80px;margin-top:50px; border: 2px solid #ddd; border-radius: 8px; padding: 10px; ">
+            <h3>Thông tin giao hàng</h3>
+            <form id="form" method="POST" action="{% url 'checkout' %}">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="name">Họ và tên</label>
+                    <input required class="form-control" type="text" name="name" placeholder="Nhập họ và tên">
+                </div>
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    <input required class="form-control" type="email" name="email" placeholder="Nhập email">
+                </div>
+                <div class="form-field">
+                    <label for="address">Địa chỉ</label>
+                    <input required class="form-control" type="text" name="address" placeholder="Nhập địa chỉ">
+                </div>
+                <div class="form-field">
+                    <label for="city">Thành phố</label>
+                    <input required class="form-control" type="text" name="city" placeholder="Nhập thành phố">
+                </div>
+                <div class="form-field">
+                    <label for="state">Tỉnh/Thành</label>
+                    <input required class="form-control" type="text" name="state" placeholder="Nhập tỉnh/thành">
+                </div>
+                <div class="form-field">
+                    <label for="mobile">Số điện thoại</label>
+                    <input required class="form-control" type="text" name="mobile" placeholder="Nhập số điện thoại">
+                </div>
+                
+                
+                <button id="form-button" class="btn btn-success btn-block" type="submit">Tiếp tục</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="checkout-section">
+        <div class="order-summary" style=" width: 700px;margin-right:80px; border: 2px solid #ddd; border-radius: 8px; padding: 10px;">
+            <h3>Tóm tắt đơn hàng</h3>
+            <hr>
+            {% for item in items %}
+            <div class="cart-row">
+                <img class="cart-item-img" src="{{item.product.ImageURL}}" alt="Sản phẩm">
+                <div class="cart-item-info">
+                    <p class="cart-item-name">{{item.product.name}}</p>
+                    <p class="cart-item-quantity">Số lượng: {{item.quantity}}</p>
+                </div>
+                <div class="price" style="color: black">{{item.product.price}} đ</div>
+            </div>
+            {% endfor %}
+            <hr>
+			<div>				
+				<div class="order-total">
+					<p>Tổng sản phẩm: {{order.get_cart_items}}</p>
+					<p class="price">Tổng tiền: {{order.get_cart_total}} đ</p>
+				</div>
+				<a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Quay lại giỏ hàng</a>
+			</div>
+			
+        </div>
+    </div>
+</div>
+{% endblock content_checkout %}
